@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <title>MyLinks — современный link-in-bio MVP</title>
+    <meta
+      name="description"
+      content="MyLinks — современный link-in-bio сервис с кастомными доменами, загрузкой файлов, аналитикой, монетизацией и гибкой кастомизацией."
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #07070a;
+        --card: rgba(16, 20, 34, 0.8);
+        --text: #f5f7ff;
+        --muted: #9aa4c7;
+        --primary: #7c5cff;
+        --primary-dark: #5b3bff;
+        --accent: #20f6ff;
+        --border: rgba(124, 92, 255, 0.2);
+        --shadow: 0 30px 80px rgba(9, 14, 32, 0.65);
+        --glass: rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+        background-image: radial-gradient(circle at top, rgba(124, 92, 255, 0.25), transparent 55%),
+          radial-gradient(circle at 20% 20%, rgba(32, 246, 255, 0.12), transparent 50%);
+      }
+
+      header {
+        padding: 32px clamp(24px, 5vw, 72px);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .logo {
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: 0.4px;
+      }
+
+      .chip {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(124, 92, 255, 0.18);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 600;
+        border: 1px solid rgba(124, 92, 255, 0.3);
+      }
+
+      .lang-switch {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .lang-switch button {
+        border: 1px solid var(--border);
+        background: var(--glass);
+        color: var(--text);
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+      }
+
+      .lang-switch button.active {
+        border-color: var(--accent);
+        color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(32, 246, 255, 0.2);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+        align-items: center;
+        padding: 24px clamp(24px, 6vw, 96px) 64px;
+      }
+
+      .hero-card {
+        background: var(--card);
+        border-radius: 28px;
+        padding: 32px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(16px);
+      }
+
+      h1 {
+        font-size: clamp(32px, 4vw, 48px);
+        margin-bottom: 16px;
+      }
+
+      .hero p {
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+
+      .cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .cta a {
+        padding: 12px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .cta .primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .cta .secondary {
+        border: 1px solid var(--border);
+        color: var(--text);
+        background: transparent;
+      }
+
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .badge {
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(124, 92, 255, 0.15);
+        color: var(--accent);
+        font-size: 14px;
+        font-weight: 600;
+        border: 1px solid rgba(124, 92, 255, 0.3);
+      }
+
+      section {
+        padding: 0 clamp(24px, 6vw, 96px) 72px;
+      }
+
+      .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      .section-title h2 {
+        font-size: clamp(24px, 3vw, 32px);
+        margin: 0;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 20px;
+        padding: 24px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+      }
+
+      .card h3 {
+        margin-top: 0;
+      }
+
+      .card p {
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .stack-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        border-radius: 16px;
+        border: 1px dashed rgba(124, 92, 255, 0.4);
+        background: rgba(10, 12, 22, 0.7);
+      }
+
+      .stack-item strong {
+        font-size: 16px;
+      }
+
+      .pill-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        background: rgba(124, 92, 255, 0.2);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .footer {
+        padding: 32px clamp(24px, 6vw, 96px) 48px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .pricing {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+      }
+
+      .pricing-card {
+        background: rgba(16, 18, 32, 0.88);
+        border-radius: 20px;
+        padding: 24px;
+        border: 1px solid rgba(124, 92, 255, 0.4);
+        box-shadow: var(--shadow);
+      }
+
+      .pricing-card h3 {
+        margin: 0 0 8px;
+      }
+
+      .pricing-card ul {
+        padding-left: 18px;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      @media (max-width: 720px) {
+        .nav {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="nav">
+        <div class="logo">MyLinks</div>
+        <div class="chip" data-i18n="tagline">Link-in-bio платформа нового поколения</div>
+        <div class="lang-switch" aria-label="Language switch">
+          <button type="button" data-lang="ru" class="active">RU</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <h1 data-i18n="hero_title">
+            MVP-сервис link-in-bio с быстрым запуском и без архитектурных тупиков
+          </h1>
+          <p data-i18n="hero_desc">
+            MyLinks объединяет профили пользователей, безопасный файловый хостинг,
+            кастомные домены, приватность и аналитику — готовность к монетизации
+            с первого релиза.
+          </p>
+          <div class="cta">
+            <a class="primary" href="#" data-i18n="cta_primary">Запросить демо</a>
+            <a class="secondary" href="#" data-i18n="cta_secondary">Посмотреть тарифы</a>
+          </div>
+          <div class="badges">
+            <div class="badge" data-i18n="badge_profiles">Профили пользователей</div>
+            <div class="badge" data-i18n="badge_custom_domains">Кастомные домены</div>
+            <div class="badge" data-i18n="badge_drag">Drag & Drop редактор</div>
+            <div class="badge" data-i18n="badge_privacy">Privacy-friendly аналитика</div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3 data-i18n="card_title">MVP-концепция</h3>
+          <ul>
+            <li data-i18n="card_list_1">Профили: mylinks.to/username + блоки ссылок, файлов, соцсетей</li>
+            <li data-i18n="card_list_2">Файлы через Cloudflare R2 + signed URLs для приватных материалов</li>
+            <li data-i18n="card_list_3">Без cookies: клики, гео, устройства, referrer + realtime счётчик</li>
+            <li data-i18n="card_list_4">Готовность к монетизации: Stripe, тарифы Free / Pro / Team</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2 data-i18n="features_title">Ключевые возможности</h2>
+          <span class="chip" data-i18n="features_chip">Guns.lol стиль</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <h3 data-i18n="feature_files">Загрузка файлов</h3>
+            <p data-i18n="feature_files_desc">
+              Форматы: изображения, видео, PDF и аудио. Лимиты: Free 100 МБ, Pro
+              5 ГБ, Team 50 ГБ.
+            </p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="feature_links">Приватные ссылки</h3>
+            <p data-i18n="feature_links_desc">
+              Пароли, истечение по времени, одноразовые ссылки (опционально).
+            </p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="feature_analytics">Аналитика</h3>
+            <p data-i18n="feature_analytics_desc">
+              Клики, устройства, гео, referrer и realtime счётчик без cookies.
+            </p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="feature_monetization">Монетизация</h3>
+            <p data-i18n="feature_monetization_desc">
+              Ограничения по ссылкам, объёму, кастомизации + Stripe Webhooks.
+            </p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="feature_qr">QR-коды</h3>
+            <p data-i18n="feature_qr_desc">
+              Генерация для профиля и конкретных ссылок.
+            </p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="feature_team">Командные аккаунты</h3>
+            <p data-i18n="feature_team_desc">
+              Workspace с ролями Owner / Editor / Viewer и общим биллингом.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2 data-i18n="stack_title">Технологический стек</h2>
+          <span class="chip" data-i18n="stack_chip">MVP-ready</span>
+        </div>
+        <div class="stack">
+          <div class="stack-item">
+            <strong data-i18n="stack_frontend">Frontend</strong>
+            <div class="pill-group">
+              <span class="pill">Next.js (App Router)</span>
+              <span class="pill">Tailwind CSS</span>
+              <span class="pill">@dnd-kit/core</span>
+              <span class="pill">SSR + SEO</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <strong data-i18n="stack_backend">Backend</strong>
+            <div class="pill-group">
+              <span class="pill">Next.js API Routes</span>
+              <span class="pill">Node.js</span>
+              <span class="pill">REST API</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <strong data-i18n="stack_storage">Хостинг файлов</strong>
+            <div class="pill-group">
+              <span class="pill">Cloudflare R2</span>
+              <span class="pill">S3-совместимое</span>
+              <span class="pill">Signed URLs</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <strong data-i18n="stack_db">База данных</strong>
+            <div class="pill-group">
+              <span class="pill">PostgreSQL</span>
+              <span class="pill">Prisma ORM</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <strong data-i18n="stack_auth">Авторизация</strong>
+            <div class="pill-group">
+              <span class="pill">NextAuth</span>
+              <span class="pill">Email</span>
+              <span class="pill">Google</span>
+              <span class="pill">GitHub</span>
+              <span class="pill">Roles: user / admin / team</span>
+            </div>
+          </div>
+          <div class="stack-item">
+            <strong data-i18n="stack_payments">Платежи</strong>
+            <div class="pill-group">
+              <span class="pill">Stripe</span>
+              <span class="pill">Free / Pro / Team</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2 data-i18n="custom_title">Кастомизация и управление</h2>
+          <span class="chip" data-i18n="custom_chip">Neon + glassmorphism</span>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <h3 data-i18n="custom_editor">Drag & Drop редактор</h3>
+            <p data-i18n="custom_editor_desc">
+              Перетаскивание блоков: ссылки, файлы, соцсети, embed — без кода.
+            </p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="custom_themes">Темы и брендинг</h3>
+            <p data-i18n="custom_themes_desc">
+              CSS-переменные под темы, тёмный фон, неоновые акценты, минимализм.
+            </p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="custom_api">API и интеграции</h3>
+            <p data-i18n="custom_api_desc">
+              Public API (read-only на старте), вебхуки позже, готовность к интеграциям.
+            </p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="custom_limits">Ограничения файлов</h3>
+            <p data-i18n="custom_limits_desc">
+              Ограничения по объёму, количеству ссылок и кастомизации по тарифам.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2 data-i18n="pricing_title">Тарифы MVP</h2>
+          <span class="chip" data-i18n="pricing_chip">Stripe-ready</span>
+        </div>
+        <div class="pricing">
+          <div class="pricing-card">
+            <h3 data-i18n="pricing_free">Free</h3>
+            <ul>
+              <li data-i18n="pricing_free_1">100 МБ хранилища</li>
+              <li data-i18n="pricing_free_2">Базовые темы</li>
+              <li data-i18n="pricing_free_3">Лимит ссылок</li>
+            </ul>
+          </div>
+          <div class="pricing-card">
+            <h3 data-i18n="pricing_pro">Pro</h3>
+            <ul>
+              <li data-i18n="pricing_pro_1">5 ГБ хранилища</li>
+              <li data-i18n="pricing_pro_2">Расширенная кастомизация</li>
+              <li data-i18n="pricing_pro_3">Приватные ссылки и пароли</li>
+            </ul>
+          </div>
+          <div class="pricing-card">
+            <h3 data-i18n="pricing_team">Team</h3>
+            <ul>
+              <li data-i18n="pricing_team_1">50 ГБ хранилища</li>
+              <li data-i18n="pricing_team_2">Workspace + роли</li>
+              <li data-i18n="pricing_team_3">Общий биллинг</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2 data-i18n="cta_title">Запуск под вашим брендом за 7 дней</h2>
+          <span class="chip" data-i18n="cta_chip">SSR + CDN + R2</span>
+        </div>
+        <div class="hero-card">
+          <p data-i18n="cta_desc">
+            Мы подготовим дизайн, настроим безопасность, подключим платежи и обучим вашу
+            команду. Настройки доступа, SLA и миграции в одном контракте.
+          </p>
+          <div class="cta">
+            <a class="primary" href="#" data-i18n="cta_contact">Связаться с командой</a>
+            <a class="secondary" href="#" data-i18n="cta_doc">Запросить ТЗ</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span data-i18n="footer">MyLinks © 2024. MVP-ready.</span>
+    </footer>
+
+    <script>
+      const translations = {
+        ru: {
+          tagline: "Link-in-bio платформа нового поколения",
+          hero_title:
+            "MVP-сервис link-in-bio с быстрым запуском и без архитектурных тупиков",
+          hero_desc:
+            "MyLinks объединяет профили пользователей, безопасный файловый хостинг, кастомные домены, приватность и аналитику — готовность к монетизации с первого релиза.",
+          cta_primary: "Запросить демо",
+          cta_secondary: "Посмотреть тарифы",
+          badge_profiles: "Профили пользователей",
+          badge_custom_domains: "Кастомные домены",
+          badge_drag: "Drag & Drop редактор",
+          badge_privacy: "Privacy-friendly аналитика",
+          card_title: "MVP-концепция",
+          card_list_1:
+            "Профили: mylinks.to/username + блоки ссылок, файлов, соцсетей",
+          card_list_2:
+            "Файлы через Cloudflare R2 + signed URLs для приватных материалов",
+          card_list_3:
+            "Без cookies: клики, гео, устройства, referrer + realtime счётчик",
+          card_list_4: "Готовность к монетизации: Stripe, тарифы Free / Pro / Team",
+          features_title: "Ключевые возможности",
+          features_chip: "Guns.lol стиль",
+          feature_files: "Загрузка файлов",
+          feature_files_desc:
+            "Форматы: изображения, видео, PDF и аудио. Лимиты: Free 100 МБ, Pro 5 ГБ, Team 50 ГБ.",
+          feature_links: "Приватные ссылки",
+          feature_links_desc:
+            "Пароли, истечение по времени, одноразовые ссылки (опционально).",
+          feature_analytics: "Аналитика",
+          feature_analytics_desc:
+            "Клики, устройства, гео, referrer и realtime счётчик без cookies.",
+          feature_monetization: "Монетизация",
+          feature_monetization_desc:
+            "Ограничения по ссылкам, объёму, кастомизации + Stripe Webhooks.",
+          feature_qr: "QR-коды",
+          feature_qr_desc: "Генерация для профиля и конкретных ссылок.",
+          feature_team: "Командные аккаунты",
+          feature_team_desc:
+            "Workspace с ролями Owner / Editor / Viewer и общим биллингом.",
+          stack_title: "Технологический стек",
+          stack_chip: "MVP-ready",
+          stack_frontend: "Frontend",
+          stack_backend: "Backend",
+          stack_storage: "Хостинг файлов",
+          stack_db: "База данных",
+          stack_auth: "Авторизация",
+          stack_payments: "Платежи",
+          custom_title: "Кастомизация и управление",
+          custom_chip: "Neon + glassmorphism",
+          custom_editor: "Drag & Drop редактор",
+          custom_editor_desc:
+            "Перетаскивание блоков: ссылки, файлы, соцсети, embed — без кода.",
+          custom_themes: "Темы и брендинг",
+          custom_themes_desc:
+            "CSS-переменные под темы, тёмный фон, неоновые акценты, минимализм.",
+          custom_api: "API и интеграции",
+          custom_api_desc:
+            "Public API (read-only на старте), вебхуки позже, готовность к интеграциям.",
+          custom_limits: "Ограничения файлов",
+          custom_limits_desc:
+            "Ограничения по объёму, количеству ссылок и кастомизации по тарифам.",
+          pricing_title: "Тарифы MVP",
+          pricing_chip: "Stripe-ready",
+          pricing_free: "Free",
+          pricing_free_1: "100 МБ хранилища",
+          pricing_free_2: "Базовые темы",
+          pricing_free_3: "Лимит ссылок",
+          pricing_pro: "Pro",
+          pricing_pro_1: "5 ГБ хранилища",
+          pricing_pro_2: "Расширенная кастомизация",
+          pricing_pro_3: "Приватные ссылки и пароли",
+          pricing_team: "Team",
+          pricing_team_1: "50 ГБ хранилища",
+          pricing_team_2: "Workspace + роли",
+          pricing_team_3: "Общий биллинг",
+          cta_title: "Запуск под вашим брендом за 7 дней",
+          cta_chip: "SSR + CDN + R2",
+          cta_desc:
+            "Мы подготовим дизайн, настроим безопасность, подключим платежи и обучим вашу команду. Настройки доступа, SLA и миграции в одном контракте.",
+          cta_contact: "Связаться с командой",
+          cta_doc: "Запросить ТЗ",
+          footer: "MyLinks © 2024. MVP-ready."
+        },
+        en: {
+          tagline: "Next‑gen link‑in‑bio platform",
+          hero_title:
+            "MVP link‑in‑bio built for fast launch and no dead‑ends",
+          hero_desc:
+            "MyLinks combines user profiles, secure file hosting, custom domains, privacy, and analytics with monetization‑ready tooling from day one.",
+          cta_primary: "Request a demo",
+          cta_secondary: "View pricing",
+          badge_profiles: "User profiles",
+          badge_custom_domains: "Custom domains",
+          badge_drag: "Drag & Drop editor",
+          badge_privacy: "Privacy‑friendly analytics",
+          card_title: "MVP concept",
+          card_list_1:
+            "Profiles: mylinks.to/username + blocks for links, files, socials",
+          card_list_2:
+            "Files on Cloudflare R2 + signed URLs for private assets",
+          card_list_3:
+            "Cookie‑free analytics: clicks, geo, devices, referrer + realtime",
+          card_list_4: "Monetization‑ready: Stripe, Free / Pro / Team tiers",
+          features_title: "Key capabilities",
+          features_chip: "Guns.lol aesthetic",
+          feature_files: "File uploads",
+          feature_files_desc:
+            "Images, video, PDF, and audio. Limits: Free 100 MB, Pro 5 GB, Team 50 GB.",
+          feature_links: "Private links",
+          feature_links_desc:
+            "Passwords, expiration windows, and optional one‑time links.",
+          feature_analytics: "Analytics",
+          feature_analytics_desc:
+            "Clicks, devices, geo, referrers, and realtime counters without cookies.",
+          feature_monetization: "Monetization",
+          feature_monetization_desc:
+            "Limits by links, storage, customization + Stripe webhooks.",
+          feature_qr: "QR codes",
+          feature_qr_desc: "Generate for profiles and specific links.",
+          feature_team: "Team accounts",
+          feature_team_desc: "Workspace with Owner / Editor / Viewer and shared billing.",
+          stack_title: "Technology stack",
+          stack_chip: "MVP-ready",
+          stack_frontend: "Frontend",
+          stack_backend: "Backend",
+          stack_storage: "File hosting",
+          stack_db: "Database",
+          stack_auth: "Authentication",
+          stack_payments: "Payments",
+          custom_title: "Customization & control",
+          custom_chip: "Neon + glassmorphism",
+          custom_editor: "Drag & Drop editor",
+          custom_editor_desc:
+            "Reorder links, files, socials, and embeds with no code.",
+          custom_themes: "Themes & branding",
+          custom_themes_desc:
+            "Theme CSS variables, dark background, neon accents, minimalism.",
+          custom_api: "API & integrations",
+          custom_api_desc:
+            "Public read‑only API first, webhooks later, integration‑ready.",
+          custom_limits: "File limits",
+          custom_limits_desc:
+            "Limits by storage, link count, and customization per plan.",
+          pricing_title: "MVP pricing",
+          pricing_chip: "Stripe-ready",
+          pricing_free: "Free",
+          pricing_free_1: "100 MB storage",
+          pricing_free_2: "Base themes",
+          pricing_free_3: "Link limit",
+          pricing_pro: "Pro",
+          pricing_pro_1: "5 GB storage",
+          pricing_pro_2: "Advanced customization",
+          pricing_pro_3: "Private links & passwords",
+          pricing_team: "Team",
+          pricing_team_1: "50 GB storage",
+          pricing_team_2: "Workspace + roles",
+          pricing_team_3: "Shared billing",
+          cta_title: "Launch under your brand in 7 days",
+          cta_chip: "SSR + CDN + R2",
+          cta_desc:
+            "We design, secure, connect payments, and train your team. Access rules, SLAs, and migrations in one contract.",
+          cta_contact: "Contact the team",
+          cta_doc: "Request requirements",
+          footer: "MyLinks © 2024. MVP-ready."
+        }
+      };
+
+      const buttons = document.querySelectorAll("[data-lang]");
+      const updateLang = (lang) => {
+        document.documentElement.lang = lang;
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          const key = element.getAttribute("data-i18n");
+          if (translations[lang][key]) {
+            element.textContent = translations[lang][key];
+          }
+        });
+        buttons.forEach((button) => {
+          button.classList.toggle("active", button.dataset.lang === lang);
+        });
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          updateLang(button.dataset.lang);
+        });
+      });
+    </script>
+  </body>
+</html>
