@@ -266,6 +266,53 @@
         color: var(--muted);
       }
 
+      .auth-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+      }
+
+      .auth-card {
+        background: rgba(14, 18, 34, 0.9);
+        border-radius: 20px;
+        padding: 24px;
+        border: 1px solid rgba(124, 92, 255, 0.4);
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .auth-card label {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .auth-card input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(124, 92, 255, 0.35);
+        background: rgba(9, 12, 24, 0.9);
+        color: var(--text);
+      }
+
+      .auth-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .auth-actions button {
+        padding: 10px 16px;
+        border-radius: 10px;
+        border: 1px solid rgba(124, 92, 255, 0.4);
+        background: transparent;
+        color: var(--text);
+        font-weight: 600;
+        cursor: pointer;
+      }
+
       @media (max-width: 720px) {
         .nav {
           flex-direction: column;
@@ -458,6 +505,53 @@
 
       <section>
         <div class="section-title">
+          <h2 data-i18n="auth_title">Создание аккаунта и авторизация</h2>
+          <span class="chip" data-i18n="auth_chip">NextAuth + OAuth</span>
+        </div>
+        <div class="auth-grid">
+          <div class="auth-card">
+            <h3 data-i18n="auth_signup_title">Регистрация</h3>
+            <div>
+              <label for="signup-email" data-i18n="auth_email_label">Email</label>
+              <input id="signup-email" type="email" placeholder="you@company.com" />
+            </div>
+            <div>
+              <label for="signup-password" data-i18n="auth_password_label">Пароль</label>
+              <input id="signup-password" type="password" placeholder="••••••••" />
+            </div>
+            <div class="auth-actions">
+              <button type="button" data-i18n="auth_create_account">Создать аккаунт</button>
+              <button type="button" data-i18n="auth_google">Войти через Google</button>
+              <button type="button" data-i18n="auth_github">Войти через GitHub</button>
+            </div>
+            <p data-i18n="auth_signup_note">
+              Роли по умолчанию: user. Администраторы и команды назначаются через Workspace.
+            </p>
+          </div>
+          <div class="auth-card">
+            <h3 data-i18n="auth_login_title">Вход</h3>
+            <div>
+              <label for="login-email" data-i18n="auth_email_label">Email</label>
+              <input id="login-email" type="email" placeholder="you@company.com" />
+            </div>
+            <div>
+              <label for="login-password" data-i18n="auth_password_label">Пароль</label>
+              <input id="login-password" type="password" placeholder="••••••••" />
+            </div>
+            <div class="auth-actions">
+              <button type="button" data-i18n="auth_login">Войти</button>
+              <button type="button" data-i18n="auth_magic_link">Magic link</button>
+              <button type="button" data-i18n="auth_reset">Сбросить пароль</button>
+            </div>
+            <p data-i18n="auth_login_note">
+              Поддержка email + OAuth, подготовка под SSO и командные роли.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
           <h2 data-i18n="pricing_title">Тарифы MVP</h2>
           <span class="chip" data-i18n="pricing_chip">Stripe-ready</span>
         </div>
@@ -574,6 +668,22 @@
           custom_limits: "Ограничения файлов",
           custom_limits_desc:
             "Ограничения по объёму, количеству ссылок и кастомизации по тарифам.",
+          auth_title: "Создание аккаунта и авторизация",
+          auth_chip: "NextAuth + OAuth",
+          auth_signup_title: "Регистрация",
+          auth_login_title: "Вход",
+          auth_email_label: "Email",
+          auth_password_label: "Пароль",
+          auth_create_account: "Создать аккаунт",
+          auth_google: "Войти через Google",
+          auth_github: "Войти через GitHub",
+          auth_login: "Войти",
+          auth_magic_link: "Magic link",
+          auth_reset: "Сбросить пароль",
+          auth_signup_note:
+            "Роли по умолчанию: user. Администраторы и команды назначаются через Workspace.",
+          auth_login_note:
+            "Поддержка email + OAuth, подготовка под SSO и командные роли.",
           pricing_title: "Тарифы MVP",
           pricing_chip: "Stripe-ready",
           pricing_free: "Free",
@@ -656,6 +766,22 @@
           custom_limits: "File limits",
           custom_limits_desc:
             "Limits by storage, link count, and customization per plan.",
+          auth_title: "Account creation & authentication",
+          auth_chip: "NextAuth + OAuth",
+          auth_signup_title: "Sign up",
+          auth_login_title: "Sign in",
+          auth_email_label: "Email",
+          auth_password_label: "Password",
+          auth_create_account: "Create account",
+          auth_google: "Continue with Google",
+          auth_github: "Continue with GitHub",
+          auth_login: "Sign in",
+          auth_magic_link: "Magic link",
+          auth_reset: "Reset password",
+          auth_signup_note:
+            "Default role: user. Admins and teams are assigned via Workspace.",
+          auth_login_note:
+            "Email + OAuth supported, with SSO and team roles readiness.",
           pricing_title: "MVP pricing",
           pricing_chip: "Stripe-ready",
           pricing_free: "Free",
