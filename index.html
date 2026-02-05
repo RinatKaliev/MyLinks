@@ -52,6 +52,12 @@
         gap: 24px;
       }
 
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
       .logo {
         font-weight: 700;
         font-size: 20px;
@@ -89,6 +95,75 @@
         border-color: var(--accent);
         color: var(--accent);
         box-shadow: 0 0 0 2px rgba(32, 246, 255, 0.2);
+      }
+
+      .profile-menu {
+        position: relative;
+      }
+
+      .profile-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--glass);
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .profile-button span {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(124, 92, 255, 0.25);
+        color: var(--accent);
+        font-size: 14px;
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 10px);
+        background: rgba(12, 16, 30, 0.98);
+        border: 1px solid rgba(124, 92, 255, 0.35);
+        border-radius: 16px;
+        padding: 16px;
+        min-width: 260px;
+        box-shadow: var(--shadow);
+        display: none;
+        z-index: 10;
+      }
+
+      .profile-dropdown.active {
+        display: block;
+      }
+
+      .profile-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .profile-tabs button {
+        flex: 1;
+        padding: 6px 8px;
+        border-radius: 8px;
+        border: 1px solid rgba(124, 92, 255, 0.3);
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .profile-tabs button.active {
+        color: var(--accent);
+        border-color: var(--accent);
       }
 
       .hero {
@@ -266,12 +341,6 @@
         color: var(--muted);
       }
 
-      .auth-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 20px;
-      }
-
       .auth-card {
         background: rgba(14, 18, 34, 0.9);
         border-radius: 20px;
@@ -313,6 +382,18 @@
         cursor: pointer;
       }
 
+      .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .auth-status {
+        font-size: 13px;
+        color: var(--accent);
+        min-height: 18px;
+      }
+
       @media (max-width: 720px) {
         .nav {
           flex-direction: column;
@@ -326,9 +407,99 @@
       <nav class="nav">
         <div class="logo">MyLinks</div>
         <div class="chip" data-i18n="tagline">Link-in-bio платформа нового поколения</div>
-        <div class="lang-switch" aria-label="Language switch">
-          <button type="button" data-lang="ru" class="active">RU</button>
-          <button type="button" data-lang="en">EN</button>
+        <div class="nav-actions">
+          <div class="lang-switch" aria-label="Language switch">
+            <button type="button" data-lang="ru" class="active">RU</button>
+            <button type="button" data-lang="en">EN</button>
+          </div>
+          <div class="profile-menu">
+            <button class="profile-button" type="button" id="profile-button">
+              <span>ML</span>
+              <strong data-i18n="profile_button">Профиль</strong>
+            </button>
+            <div class="profile-dropdown" id="profile-dropdown">
+              <div class="profile-tabs">
+                <button type="button" data-tab="signup" class="active" data-i18n="auth_signup_title">
+                  Регистрация
+                </button>
+                <button type="button" data-tab="login" data-i18n="auth_login_title">Вход</button>
+              </div>
+              <div class="auth-card" data-tab-panel="signup">
+                <form id="signup-form" class="auth-form">
+                  <div>
+                    <label for="signup-email" data-i18n="auth_email_label">Email</label>
+                    <input
+                      id="signup-email"
+                      name="email"
+                      type="email"
+                      placeholder="you@company.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label for="signup-password" data-i18n="auth_password_label">Пароль</label>
+                    <input
+                      id="signup-password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                  <div class="auth-actions">
+                    <button type="submit" data-i18n="auth_create_account">Создать аккаунт</button>
+                    <button type="button" data-provider="google" data-i18n="auth_google">
+                      Войти через Google
+                    </button>
+                    <button type="button" data-provider="github" data-i18n="auth_github">
+                      Войти через GitHub
+                    </button>
+                  </div>
+                  <p class="auth-status" aria-live="polite"></p>
+                </form>
+                <p data-i18n="auth_signup_note">
+                  Создайте аккаунт, чтобы управлять ссылками, файлами и аналитикой.
+                </p>
+              </div>
+              <div class="auth-card" data-tab-panel="login" hidden>
+                <form id="login-form" class="auth-form">
+                  <div>
+                    <label for="login-email" data-i18n="auth_email_label">Email</label>
+                    <input
+                      id="login-email"
+                      name="email"
+                      type="email"
+                      placeholder="you@company.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label for="login-password" data-i18n="auth_password_label">Пароль</label>
+                    <input
+                      id="login-password"
+                      name="password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                  <div class="auth-actions">
+                    <button type="submit" data-i18n="auth_login">Войти</button>
+                    <button type="button" data-action="magic" data-i18n="auth_magic_link">
+                      Magic link
+                    </button>
+                    <button type="button" data-action="reset" data-i18n="auth_reset">
+                      Сбросить пароль
+                    </button>
+                  </div>
+                  <p class="auth-status" aria-live="polite"></p>
+                </form>
+                <p data-i18n="auth_login_note">
+                  Войдите, чтобы редактировать профиль и доступы к приватным ссылкам.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </nav>
     </header>
@@ -369,7 +540,7 @@
       <section>
         <div class="section-title">
           <h2 data-i18n="features_title">Ключевые возможности</h2>
-          <span class="chip" data-i18n="features_chip">Neon + glassmorphism</span>
+          <span class="chip" data-i18n="features_chip">Стиль и прозрачность</span>
         </div>
         <div class="grid">
           <div class="card">
@@ -473,7 +644,7 @@
       <section>
         <div class="section-title">
           <h2 data-i18n="custom_title">Кастомизация и управление</h2>
-          <span class="chip" data-i18n="custom_chip">Neon + glassmorphism</span>
+          <span class="chip" data-i18n="custom_chip">Гибкая настройка</span>
         </div>
         <div class="grid">
           <div class="card">
@@ -498,91 +669,6 @@
             <h3 data-i18n="custom_limits">Ограничения файлов</h3>
             <p data-i18n="custom_limits_desc">
               Ограничения по объёму, количеству ссылок и кастомизации по тарифам.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div class="section-title">
-          <h2 data-i18n="auth_title">Создание аккаунта и авторизация</h2>
-          <span class="chip" data-i18n="auth_chip">NextAuth + OAuth</span>
-        </div>
-        <div class="auth-grid">
-          <div class="auth-card">
-            <h3 data-i18n="auth_signup_title">Регистрация</h3>
-            <form id="signup-form" class="auth-form">
-              <div>
-                <label for="signup-email" data-i18n="auth_email_label">Email</label>
-                <input
-                  id="signup-email"
-                  name="email"
-                  type="email"
-                  placeholder="you@company.com"
-                  required
-                />
-              </div>
-              <div>
-                <label for="signup-password" data-i18n="auth_password_label">Пароль</label>
-                <input
-                  id="signup-password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              <div class="auth-actions">
-                <button type="submit" data-i18n="auth_create_account">Создать аккаунт</button>
-                <button type="button" data-provider="google" data-i18n="auth_google">
-                  Войти через Google
-                </button>
-                <button type="button" data-provider="github" data-i18n="auth_github">
-                  Войти через GitHub
-                </button>
-              </div>
-              <p class="auth-status" aria-live="polite"></p>
-            </form>
-            <p data-i18n="auth_signup_note">
-              Роли по умолчанию: user. Администраторы и команды назначаются через Workspace.
-            </p>
-          </div>
-          <div class="auth-card">
-            <h3 data-i18n="auth_login_title">Вход</h3>
-            <form id="login-form" class="auth-form">
-              <div>
-                <label for="login-email" data-i18n="auth_email_label">Email</label>
-                <input
-                  id="login-email"
-                  name="email"
-                  type="email"
-                  placeholder="you@company.com"
-                  required
-                />
-              </div>
-              <div>
-                <label for="login-password" data-i18n="auth_password_label">Пароль</label>
-                <input
-                  id="login-password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              <div class="auth-actions">
-                <button type="submit" data-i18n="auth_login">Войти</button>
-                <button type="button" data-action="magic" data-i18n="auth_magic_link">
-                  Magic link
-                </button>
-                <button type="button" data-action="reset" data-i18n="auth_reset">
-                  Сбросить пароль
-                </button>
-              </div>
-              <p class="auth-status" aria-live="polite"></p>
-            </form>
-            <p data-i18n="auth_login_note">
-              Поддержка email + OAuth, подготовка под SSO и командные роли.
             </p>
           </div>
         </div>
@@ -666,7 +752,7 @@
             "Без cookies: клики, гео, устройства, referrer + realtime счётчик",
           card_list_4: "Готовность к монетизации: Stripe, тарифы Free / Pro / Team",
           features_title: "Ключевые возможности",
-          features_chip: "Neon + glassmorphism",
+          features_chip: "Стиль и прозрачность",
           feature_files: "Загрузка файлов",
           feature_files_desc:
             "Форматы: изображения, видео, PDF и аудио. Лимиты: Free 100 МБ, Pro 5 ГБ, Team 50 ГБ.",
@@ -693,7 +779,7 @@
           stack_auth: "Авторизация",
           stack_payments: "Платежи",
           custom_title: "Кастомизация и управление",
-          custom_chip: "Neon + glassmorphism",
+          custom_chip: "Гибкая настройка",
           custom_editor: "Drag & Drop редактор",
           custom_editor_desc:
             "Перетаскивание блоков: ссылки, файлы, соцсети, embed — без кода.",
@@ -706,8 +792,6 @@
           custom_limits: "Ограничения файлов",
           custom_limits_desc:
             "Ограничения по объёму, количеству ссылок и кастомизации по тарифам.",
-          auth_title: "Создание аккаунта и авторизация",
-          auth_chip: "NextAuth + OAuth",
           auth_signup_title: "Регистрация",
           auth_login_title: "Вход",
           auth_email_label: "Email",
@@ -719,9 +803,10 @@
           auth_magic_link: "Magic link",
           auth_reset: "Сбросить пароль",
           auth_signup_note:
-            "Роли по умолчанию: user. Администраторы и команды назначаются через Workspace.",
+            "Создайте аккаунт, чтобы управлять ссылками, файлами и аналитикой.",
           auth_login_note:
-            "Поддержка email + OAuth, подготовка под SSO и командные роли.",
+            "Войдите, чтобы редактировать профиль и доступы к приватным ссылкам.",
+          profile_button: "Профиль",
           pricing_title: "Тарифы MVP",
           pricing_chip: "Stripe-ready",
           pricing_free: "Free",
@@ -765,7 +850,7 @@
             "Cookie‑free analytics: clicks, geo, devices, referrer + realtime",
           card_list_4: "Monetization‑ready: Stripe, Free / Pro / Team tiers",
           features_title: "Key capabilities",
-          features_chip: "Neon + glassmorphism",
+          features_chip: "Style & clarity",
           feature_files: "File uploads",
           feature_files_desc:
             "Images, video, PDF, and audio. Limits: Free 100 MB, Pro 5 GB, Team 50 GB.",
@@ -791,7 +876,7 @@
           stack_auth: "Authentication",
           stack_payments: "Payments",
           custom_title: "Customization & control",
-          custom_chip: "Neon + glassmorphism",
+          custom_chip: "Flexible setup",
           custom_editor: "Drag & Drop editor",
           custom_editor_desc:
             "Reorder links, files, socials, and embeds with no code.",
@@ -804,8 +889,6 @@
           custom_limits: "File limits",
           custom_limits_desc:
             "Limits by storage, link count, and customization per plan.",
-          auth_title: "Account creation & authentication",
-          auth_chip: "NextAuth + OAuth",
           auth_signup_title: "Sign up",
           auth_login_title: "Sign in",
           auth_email_label: "Email",
@@ -817,9 +900,10 @@
           auth_magic_link: "Magic link",
           auth_reset: "Reset password",
           auth_signup_note:
-            "Default role: user. Admins and teams are assigned via Workspace.",
+            "Create an account to manage links, files, and analytics.",
           auth_login_note:
-            "Email + OAuth supported, with SSO and team roles readiness.",
+            "Sign in to edit your profile and private link access.",
+          profile_button: "Profile",
           pricing_title: "MVP pricing",
           pricing_chip: "Stripe-ready",
           pricing_free: "Free",
@@ -845,6 +929,10 @@
       };
 
       const buttons = document.querySelectorAll("[data-lang]");
+      const profileButton = document.getElementById("profile-button");
+      const profileDropdown = document.getElementById("profile-dropdown");
+      const profileTabs = document.querySelectorAll(".profile-tabs button");
+      const profilePanels = document.querySelectorAll("[data-tab-panel]");
       const authMessages = {
         ru: {
           signupSuccess: "Аккаунт создан. Мы отправили письмо для подтверждения.",
@@ -880,6 +968,41 @@
       buttons.forEach((button) => {
         button.addEventListener("click", () => {
           updateLang(button.dataset.lang);
+        });
+      });
+
+      const toggleDropdown = () => {
+        if (profileDropdown) {
+          profileDropdown.classList.toggle("active");
+        }
+      };
+
+      const closeDropdown = (event) => {
+        if (!profileDropdown || !profileButton) {
+          return;
+        }
+        if (!profileDropdown.contains(event.target) && !profileButton.contains(event.target)) {
+          profileDropdown.classList.remove("active");
+        }
+      };
+
+      if (profileButton) {
+        profileButton.addEventListener("click", toggleDropdown);
+        document.addEventListener("click", closeDropdown);
+      }
+
+      profileTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          profileTabs.forEach((item) => item.classList.remove("active"));
+          tab.classList.add("active");
+          const target = tab.dataset.tab;
+          profilePanels.forEach((panel) => {
+            const isActive = panel.dataset.tabPanel === target;
+            panel.hidden = !isActive;
+          });
+          document.querySelectorAll(".auth-status").forEach((status) => {
+            status.textContent = "";
+          });
         });
       });
 
