@@ -369,7 +369,7 @@
       <section>
         <div class="section-title">
           <h2 data-i18n="features_title">Ключевые возможности</h2>
-          <span class="chip" data-i18n="features_chip">Guns.lol стиль</span>
+          <span class="chip" data-i18n="features_chip">Neon + glassmorphism</span>
         </div>
         <div class="grid">
           <div class="card">
@@ -511,38 +511,76 @@
         <div class="auth-grid">
           <div class="auth-card">
             <h3 data-i18n="auth_signup_title">Регистрация</h3>
-            <div>
-              <label for="signup-email" data-i18n="auth_email_label">Email</label>
-              <input id="signup-email" type="email" placeholder="you@company.com" />
-            </div>
-            <div>
-              <label for="signup-password" data-i18n="auth_password_label">Пароль</label>
-              <input id="signup-password" type="password" placeholder="••••••••" />
-            </div>
-            <div class="auth-actions">
-              <button type="button" data-i18n="auth_create_account">Создать аккаунт</button>
-              <button type="button" data-i18n="auth_google">Войти через Google</button>
-              <button type="button" data-i18n="auth_github">Войти через GitHub</button>
-            </div>
+            <form id="signup-form" class="auth-form">
+              <div>
+                <label for="signup-email" data-i18n="auth_email_label">Email</label>
+                <input
+                  id="signup-email"
+                  name="email"
+                  type="email"
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+              <div>
+                <label for="signup-password" data-i18n="auth_password_label">Пароль</label>
+                <input
+                  id="signup-password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <div class="auth-actions">
+                <button type="submit" data-i18n="auth_create_account">Создать аккаунт</button>
+                <button type="button" data-provider="google" data-i18n="auth_google">
+                  Войти через Google
+                </button>
+                <button type="button" data-provider="github" data-i18n="auth_github">
+                  Войти через GitHub
+                </button>
+              </div>
+              <p class="auth-status" aria-live="polite"></p>
+            </form>
             <p data-i18n="auth_signup_note">
               Роли по умолчанию: user. Администраторы и команды назначаются через Workspace.
             </p>
           </div>
           <div class="auth-card">
             <h3 data-i18n="auth_login_title">Вход</h3>
-            <div>
-              <label for="login-email" data-i18n="auth_email_label">Email</label>
-              <input id="login-email" type="email" placeholder="you@company.com" />
-            </div>
-            <div>
-              <label for="login-password" data-i18n="auth_password_label">Пароль</label>
-              <input id="login-password" type="password" placeholder="••••••••" />
-            </div>
-            <div class="auth-actions">
-              <button type="button" data-i18n="auth_login">Войти</button>
-              <button type="button" data-i18n="auth_magic_link">Magic link</button>
-              <button type="button" data-i18n="auth_reset">Сбросить пароль</button>
-            </div>
+            <form id="login-form" class="auth-form">
+              <div>
+                <label for="login-email" data-i18n="auth_email_label">Email</label>
+                <input
+                  id="login-email"
+                  name="email"
+                  type="email"
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+              <div>
+                <label for="login-password" data-i18n="auth_password_label">Пароль</label>
+                <input
+                  id="login-password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <div class="auth-actions">
+                <button type="submit" data-i18n="auth_login">Войти</button>
+                <button type="button" data-action="magic" data-i18n="auth_magic_link">
+                  Magic link
+                </button>
+                <button type="button" data-action="reset" data-i18n="auth_reset">
+                  Сбросить пароль
+                </button>
+              </div>
+              <p class="auth-status" aria-live="polite"></p>
+            </form>
             <p data-i18n="auth_login_note">
               Поддержка email + OAuth, подготовка под SSO и командные роли.
             </p>
@@ -628,7 +666,7 @@
             "Без cookies: клики, гео, устройства, referrer + realtime счётчик",
           card_list_4: "Готовность к монетизации: Stripe, тарифы Free / Pro / Team",
           features_title: "Ключевые возможности",
-          features_chip: "Guns.lol стиль",
+          features_chip: "Neon + glassmorphism",
           feature_files: "Загрузка файлов",
           feature_files_desc:
             "Форматы: изображения, видео, PDF и аудио. Лимиты: Free 100 МБ, Pro 5 ГБ, Team 50 ГБ.",
@@ -727,7 +765,7 @@
             "Cookie‑free analytics: clicks, geo, devices, referrer + realtime",
           card_list_4: "Monetization‑ready: Stripe, Free / Pro / Team tiers",
           features_title: "Key capabilities",
-          features_chip: "Guns.lol aesthetic",
+          features_chip: "Neon + glassmorphism",
           feature_files: "File uploads",
           feature_files_desc:
             "Images, video, PDF, and audio. Limits: Free 100 MB, Pro 5 GB, Team 50 GB.",
@@ -807,6 +845,22 @@
       };
 
       const buttons = document.querySelectorAll("[data-lang]");
+      const authMessages = {
+        ru: {
+          signupSuccess: "Аккаунт создан. Мы отправили письмо для подтверждения.",
+          loginSuccess: "Добро пожаловать! Выполняем вход.",
+          oauth: (provider) => `Переходим к входу через ${provider}.`,
+          magic: "Ссылка для входа отправлена на email.",
+          reset: "Ссылка для сброса пароля отправлена на email."
+        },
+        en: {
+          signupSuccess: "Account created. We sent a verification email.",
+          loginSuccess: "Welcome back! Signing you in.",
+          oauth: (provider) => `Redirecting to ${provider} sign-in.`,
+          magic: "A magic link has been sent to your email.",
+          reset: "Password reset link sent to your email."
+        }
+      };
       const updateLang = (lang) => {
         document.documentElement.lang = lang;
         document.querySelectorAll("[data-i18n]").forEach((element) => {
@@ -814,6 +868,9 @@
           if (translations[lang][key]) {
             element.textContent = translations[lang][key];
           }
+        });
+        document.querySelectorAll(".auth-status").forEach((status) => {
+          status.textContent = "";
         });
         buttons.forEach((button) => {
           button.classList.toggle("active", button.dataset.lang === lang);
@@ -825,6 +882,56 @@
           updateLang(button.dataset.lang);
         });
       });
+
+      const getLang = () => document.documentElement.lang || "ru";
+      const updateStatus = (formId, message) => {
+        const form = document.getElementById(formId);
+        if (!form) {
+          return;
+        }
+        const status = form.querySelector(".auth-status");
+        if (status) {
+          status.textContent = message;
+        }
+      };
+
+      const signupForm = document.getElementById("signup-form");
+      if (signupForm) {
+        signupForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const lang = getLang();
+          updateStatus("signup-form", authMessages[lang].signupSuccess);
+          signupForm.reset();
+        });
+        signupForm.querySelectorAll("[data-provider]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const lang = getLang();
+            const providerName = button.dataset.provider === "google" ? "Google" : "GitHub";
+            updateStatus("signup-form", authMessages[lang].oauth(providerName));
+          });
+        });
+      }
+
+      const loginForm = document.getElementById("login-form");
+      if (loginForm) {
+        loginForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const lang = getLang();
+          updateStatus("login-form", authMessages[lang].loginSuccess);
+          loginForm.reset();
+        });
+        loginForm.querySelectorAll("[data-action]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const lang = getLang();
+            const action = button.dataset.action;
+            const message =
+              action === "magic"
+                ? authMessages[lang].magic
+                : authMessages[lang].reset;
+            updateStatus("login-form", message);
+          });
+        });
+      }
     </script>
   </body>
 </html>
